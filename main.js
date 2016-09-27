@@ -1,6 +1,10 @@
 var saveToLocalStorage = {
 
     save: function() {
+       if (!Modernizr.localstorage){
+            console.log("This browser doesn't not support Local Storage!");
+            return false;
+        }
         var myKeyInput  = document.getElementById('keyInput').value;
         var myNameInput = document.getElementById('valueInput').value;
 
@@ -20,11 +24,16 @@ var saveToLocalStorage = {
     render: function(){
         //  Get from local storage and render each key/value
         for( i=0; i < localStorage.length; i++ ){
-            var myKey    = localStorage.key(i);
-            var myValue  = localStorage[myKey];
-            var newNode  = document.createElement("LI");
-            var textnode = document.createTextNode(myKey + ": " + myValue);
-
+            var myKey = localStorage.key(i);
+            if (myKey.startsWith("_")) {
+                continue;
+            } else {
+                var myKey    = localStorage.key(i);
+                var myValue  = localStorage[myKey];
+                var newNode  = document.createElement("LI");
+                var textnode = document.createTextNode(myKey + ": " + myValue);
+            }
+            
             // Key/value must both have something to render
             if(myKey && myValue){
                 newNode.appendChild(textnode);
@@ -35,5 +44,4 @@ var saveToLocalStorage = {
             }
         }
     }
-
 };
